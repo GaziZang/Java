@@ -1,0 +1,28 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{yyyy/MM/dd HH:mm:ss} %-5level [%thread%X{sourceThread}]%logger{24} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>/var/gz/log/maven_web_demo.log.%d{yyyy-MM-dd_HH}</fileNamePattern>
+            <!--保留时间-->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy/MM/dd HH:mm:ss} %-5level ${version} [%thread]%logger{16} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="gz.test" level="info" additivity="true">
+        <appender-ref ref="FILE"/>
+    </logger>
+    <logger name="test1" level="warn" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
