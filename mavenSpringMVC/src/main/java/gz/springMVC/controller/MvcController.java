@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class MvcController {
     @ResponseBody
     @RequestMapping(value = "/hello", method = RequestMethod.POST)
-    public String postHello(@RequestParam(value = "data", required = false) String data){
+    public String postHello(@RequestBody User data){
         System.out.println(data);
         return JsonHelper.objectToJson(new Response());
     }
