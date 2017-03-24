@@ -6,14 +6,18 @@ import gz.maven.web.constant.Constants;
 import gz.maven.web.helper.JsonHelper;
 import gz.maven.web.model.Response;
 import gz.maven.web.model.User;
+import gz.maven.web.util.HttpUtil;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
@@ -25,35 +29,33 @@ import java.util.List;
  * Created by gazizang on 17/3/19.
  */
 public class CallRemoteService {
-    public String httpPost(String method){
-        HttpClient httpClient = new DefaultHttpClient();
+    public String httpPost(String method) {
         String url = Constants.url + method;
         HttpPost httpPost = new HttpPost(url);
-        String result = "";
-        try
-        {
-            User user = new User();
-            user.setUserName("request");
-            user.setAge(21);
-//            StringEntity entity = new StringEntity(JsonHelper.objectToJson(user), "UTF-8");
-//            entity.setContentEncoding("UTF-8");
-//            entity.setContentType("application/json");
+        HttpClient httpClient = HttpClients.createDefault();
 
-            List<NameValuePair> params = new LinkedList<NameValuePair>();
-            params.add(new BasicNameValuePair("user", JsonHelper.objectToJson(user)));
+        User user = new User();
+        user.setUserName("request");
+        user.setAge(21);
 
-            httpPost.setHeader("Content-type", "application/json");
-            httpPost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-            HttpResponse httpResponse = httpClient.execute(httpPost);
-            result = EntityUtils.toString(httpResponse.getEntity());
-            Response response = JsonHelper.jsonToObject(result, Response.class);
-            System.out.println(response);
+        List<NameValuePair> params = new LinkedList<NameValuePair>();
+        params.add(new BasicNameValuePair("data", JsonHelper.objectToJson(user)));
+//        params.add(new BasicNameValuePair("userName", "request"));
+//        params.add(new BasicNameValuePair("age", "21"));
 
-        }catch (ClientProtocolException e){
-            e.printStackTrace();
-        }catch (IOException e){
+        try {
+
+            httpPost.setEntity(new StringEntity(JsonHelper.objectToJson(user), ContentType.APPLICATION_JSON));
+//            httpPost.setEntity(new UrlEncodedFormEntity(params));
+            HttpResponse response = httpClient.execute(httpPost);
+            String result = response.getEntity().toString();
+
+            return result;
+//            return HttpUtil.post(url, params);
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return result;
+
+        return null;
     }
 }
