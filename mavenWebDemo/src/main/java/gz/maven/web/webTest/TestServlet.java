@@ -22,7 +22,7 @@ public class TestServlet extends HttpServlet {
 //        response.setStatus(HttpServletResponse.SC_OK);
 //        response.getWriter().println("sdhfajsdflk");
 
-        String methodUrl = "/mvc/hello";
+        String methodUrl = "/mvc/hello/new";
         String result = new CallRemoteService().httpPost(methodUrl);
         response.getWriter().println(result);
     }

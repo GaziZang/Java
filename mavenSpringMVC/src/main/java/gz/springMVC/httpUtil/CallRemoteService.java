@@ -1,7 +1,6 @@
-package gz.maven.web.service;
+package gz.springMVC.httpUtil;
 
 
-import com.google.gson.JsonObject;
 import gz.maven.web.constant.Constants;
 import gz.maven.web.helper.JsonHelper;
 import gz.maven.web.model.Response;
